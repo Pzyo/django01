@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<a href="{% url 'ooo' %}">111</a>
+<a href="{% url 'ooo' %}">222</a>
+
+<a href="{% url 'xxx' 123 %}"></a>
+
+<a href="{% url 'sss' year=123 %}"></a>
+<a href="{% url 'sss' 111 %}"></a>
+
+{#{% url 'app02:ggg' %}#}
+{#{% url 'app03:ggg' %}#}
+
+{% url 'app02_ggg' %}
+{% url 'app03_ggg' %}
+</body>
+</html>

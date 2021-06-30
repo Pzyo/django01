@@ -1,0 +1,13 @@
+{% extends 'app02/home.html' %}
+
+{% block content %}
+    <h1 class="text-center">登录页面</h1>
+    <form action="">
+        <p>username:<input type="text" class="form-control"></p>
+        <p>password:<input type="text" class="form-control"></p>
+        <input type="submit" class="btn btn-success">
+    </form>
+
+    <p>模板的导入</p>
+    {% include 'app02/wasai.html' %}
+{% endblock %}
