@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^delete_user/',views.delete_user),
 
     # 路由匹配
-    # url(r'test',views.test),     # testadd也会匹配上
+    # url(r'test',views.test),     # /testadd也会匹配上
     # url(r'testadd',views.testadd),
     # url(r'test/',views.test),    # asdasdtest/会匹配上
     # url(r'testadd/',views.testadd),
