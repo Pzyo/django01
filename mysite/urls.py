@@ -43,7 +43,7 @@ urlpatterns = [
     # url(r'^test/$',views.test),    # 只匹配test/
     # url(r'^testadd/$',views.testadd),
 
-    # 首页sss
+    # 首页
     url(r'^$',views.home),
     # 尾页(了解, 有漏洞)
     # url(r'',views.error),
