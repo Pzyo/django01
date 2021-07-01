@@ -301,11 +301,114 @@ if __name__ == "__main__":
 
     # 4. 查询书籍主键是1的作者的手机号
     # book author author_detail
-    res = models.Book.objects.filter(pk=1).values('authors__author_detail__phone')
-    print(res)
+    # res = models.Book.objects.filter(pk=1).values('authors__author_detail__phone')
+    # print(res)
 
     """
     只要掌握了正反向的概念
     以及双下划线
     那么就可以无限制的跨表
     """
+
+    # 聚合查询  aggregate
+    """
+    聚合查询通常情况下, 都是配合分组一起使用的
+    只要是跟数据库相关的模块
+        基本上都是在django.db.models里面
+        如果上述没有, 那么应该在django.db里面
+    """
+    # from django.db.models import Max,Min,Sum,Count,Avg
+
+    # 1. 所有书的平均价格
+    # res = models.Book.objects.aggregate(Avg('price'))
+    # print(res)
+
+    # 2. 上述方法一次性使用
+    # res = models.Book.objects.aggregate(Max('price'),Min('price'),Sum('price'),Count('pk'),Avg('price'))
+    # print(res)
+
+
+    # 分组查询  annotate
+    """
+    MySQL分组查询都有哪些特点
+        分组之后默认只能获取到分组的依据  组内其他字段都无法直接获取了
+            严格模式
+                ONLY_FULL_GROUP_BY
+                
+    """
+    from django.db.models import Max, Min, Sum, Count, Avg
+    # 1. 统计每一本书的作者个数
+    # res = models.Book.objects.annotate()  # models后面点什么 就是按什么分组
+    # res = models.Book.objects.annotate(author_num=Count('authors')).values('title','author_num')
+    """
+    author_num是我们自己定义的字段  用来存储统计出来的每本书对应的作者个数
+    """
+    # res1 = models.Book.objects.annotate(author_num=Count('authors__id')).values('title','author_num')
+    # print(res,res1)
+
+    # 2. 统计每个出版社卖的最便宜的书的价格
+    # res = models.Publish.objects.annotate(min_price=Min('book__price')).values('name','book__title','min_price')
+    # print(res)
+
+    # 3. 统计不止一个作者的图书
+    # (1) 先按照图书分组  求每一本书的作者个数
+    # (2) 过滤出不止一个作者的图书
+    # res = models.Book.objects.annotate(author_num=Count('authors')).filter(author_num__gte=2).values('title','author_num')
+    """
+    只要orm语句得出的结果还是一个queryset对象
+    那么它就可以继续无限的点queryset对象封装的方法
+    """
+    # print(res)
+
+    # 4. 查询每个作者出的书的总价格
+    # res = models.Author.objects.annotate(total_price=Sum('book__price')).values('name','total_price')
+    # print(res)
+
+    """
+    如果按照指定的字段分组该如何处理呢?
+        models.Book.objects.values('price').annotate()  # 按照price分组
+        
+    如果出现分组查询报错的情况
+        需要修改数据库严格模式
+    """
+
+
+    # F与Q查询
+    # 1. 查询卖出数大于库存数的书籍
+    # F查询
+    """
+    能够帮助你直接获取到表中某个字段对应的数据
+    """
+    from django.db.models import F
+    # res = models.Book.objects.filter(maichu__gt=F('kucun'))
+    # print(res)
+
+    # 2. 将所有书籍的价格提升500块
+    # models.Book.objects.update(price=F('price') + 500)
+
+    # 3. 将所有书的名称后面加上爆款两字
+    """
+    在操作字符类型的数据的时候 F不能够直接坐到字符串的拼接
+    """
+    # from django.db.models.functions import Concat
+    # from django.db.models import Value
+    # models.Book.objects.update(title=Concat(F('title'),Value('爆款')))
+    # models.Book.objects.update(title=F('title') + '爆款')  # 如果这么写, 所有名称会全部变成空白
+
+    # Q查询
+    # 1. 查询卖出数大于100或者价格小于600的书籍
+    # res = models.Book.objects.filter(maichu__gt=100,price__lt=600)  # <QuerySet []>
+    """filter括号内多个参数是and关系"""
+    from django.db.models import Q
+    # res = models.Book.objects.filter(Q(maichu__gt=100), Q(price__lt=600))  # Q包裹逗号分割, 还是and关系
+    # res = models.Book.objects.filter(Q(maichu__gt=100) | Q(price__lt=600))  # | or关系
+    # res = models.Book.objects.filter(~Q(maichu__gt=100) | Q(price__lt=600))  # ~ not关系
+    # print(res)
+
+    # Q的高阶用法  能够将查询条件的左边也变成字符串的形式
+    q = Q()
+    q.connector = 'or'
+    q.children.append(('maichu__gt',100))
+    q.children.append(('price__lt',600))
+    res = models.Book.objects.filter(q)  # filter括号内也支持直接放q对象  默认还是and关系
+    print(res)

@@ -22,10 +22,18 @@ class Book(models.Model):
     price = models.DecimalField(max_digits=8,decimal_places=2)
     publish_date = models.DateField(auto_now_add=True)
 
+    # 库存
+    kucun = models.IntegerField(default=1000)
+    # 卖出
+    maichu = models.IntegerField(default=1000)
+
     # 一对多
     publish = models.ForeignKey(to='Publish')
     # 多对多
     authors = models.ManyToManyField(to='Author')
+
+    def __str__(self):
+        return self.title
 
 class Publish(models.Model):
     name = models.CharField(max_length=32)
