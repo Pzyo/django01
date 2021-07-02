@@ -406,9 +406,22 @@ if __name__ == "__main__":
     # print(res)
 
     # Q的高阶用法  能够将查询条件的左边也变成字符串的形式
-    q = Q()
-    q.connector = 'or'
-    q.children.append(('maichu__gt',100))
-    q.children.append(('price__lt',600))
-    res = models.Book.objects.filter(q)  # filter括号内也支持直接放q对象  默认还是and关系
-    print(res)
+    # q = Q()
+    # q.connector = 'or'
+    # q.children.append(('maichu__gt',100))
+    # q.children.append(('price__lt',600))
+    # res = models.Book.objects.filter(q)  # filter括号内也支持直接放q对象  默认还是and关系
+    # print(res)
+
+
+    # 事务
+    # from django.db import transaction
+    # try:
+    #     with transaction.atomic():
+    #         # sql1
+    #         # sql2
+    #         # 在with代码块内书写的所有orm操作都属于同一个事务
+    #         pass
+    # except Exception as e:
+    #     print(e)
+    # print('执行其他操作')
