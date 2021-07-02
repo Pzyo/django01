@@ -2,6 +2,22 @@ from django.db import models
 
 # Create your models here.
 
+# 自定义字段
+
+class MyCharField(models.Field):
+    def __init__(self,max_length,*args,**kwargs):
+        self.max_length = max_length
+        # 调用父类的init方法
+        super().__init__(max_length=max_length,*args,**kwargs)  # 一定是要关键字的形式传入
+
+    def db_type(self, connection):
+        """
+        返回真正的数据类型及各种约束条件
+        :param connection:
+        :return:
+        """
+        return 'char(%s)'%self.max_length
+
 class User(models.Model):
     name = models.CharField(max_length=32)
     age = models.IntegerField()
@@ -31,6 +47,9 @@ class Book(models.Model):
     publish = models.ForeignKey(to='Publish')
     # 多对多
     authors = models.ManyToManyField(to='Author')
+
+    # 自定义字段使用
+    myfield = MyCharField(max_length=16,null=True)
 
     def __str__(self):
         return self.title
