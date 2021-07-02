@@ -426,4 +426,56 @@ if __name__ == "__main__":
     #     print(e)
     # print('执行其他操作')
 
+    # res = models.Book.objects.all()
+    # print(res)  # 要用数据了才会查数据库
+
+
+    # 想要获取书籍表中所有书的名字
+    # res = models.Book.objects.values('title')
+    # for d in res:
+    #     print(d.get('title'))
+    # 实现获取到的是一个数据对象 然后 .title 就能获取书名, 并且没有其他字段
+    # res = models.Book.objects.only('title')
+    # res = models.Book.objects.all()
+    # print(res)  # <QuerySet [<Book: 三国演义>, <Book: 红楼梦>, <Book: 论语>, <Book: 聊斋>, <Book: 老子>]>
+    # for i in res:
+        # print(i.title)  # 点击only括号内的字段  不会走数据库
+        # print(i.price)  # 点击only括号内没有的字段  会重新走数据库查询 而all不需要
+
+    # res = models.Book.objects.defer('title')  # 对象除了没有title属性之外其他的都有
+    # for i in res:
+    #     print(i.price)
+    """
+    defer与only刚好相反
+        defer括号内放的字段不在查询出来的对象里面  查询该字段需要重新走数据库
+        而如果查询的是非括号内的字段  则不需要走数据库了
+    """
+
+    # select_related与prefetch_related 跟跨表操作有关
+    # res = models.Book.objects.all()
+    # for i in res:
+    #     print(i.publish.name)  # 每循环一次就要走一次数据库查询
+
+    # res = models.Book.objects.select_related('publish')  # INNER JOIN
+    """
+    select_related内部直接先将book与publish表连起来 然后一次性将大表里面的所有数据
+    全部封装给查询出来的对象
+        这个时候对象无论是点击book表的数据还是publish的数据都无需走数据库查询了
+        
+    select_related括号内只能放外键字段  一对多  一对一
+        多对多也不行
+    """
+    # for i in res:
+    #     print(i.publish.name)
+
+
+    res = models.Book.objects.prefetch_related('publish')  # 子查询
+    """
+    prefetch_related该方法内部其实就是子查询
+        将子查询查询出来的所有结果给你封装到对象中
+        给你的感觉好像也是一次性搞定的
+    """
+    for i in res:
+        print(i.publish.name)
+
 
