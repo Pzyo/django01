@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'app01.apps.App01Config',  # 全写
     'app02',                   # 简写
     'app03',
+    'app04',
 ]
 
 MIDDLEWARE = [
