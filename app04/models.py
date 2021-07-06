@@ -20,7 +20,7 @@ class User(models.Model):
         ('D', '不及格'),
     )
     # 保证字段类型跟列举出来的元组第一个数据类型一致即可
-    score = models.CharField(choices=score_choices,null=True)
+    # score = models.CharField(choices=score_choices,null=True)
     """
     该gender字段存的还是数字, 但是如果存的数字在上面的元组范围之内
     那么可以非常轻松的获取到数字对应的真正的内容
@@ -29,14 +29,14 @@ class User(models.Model):
     2. 如果在 如何获取对应的中文信息
     """
 
-class Book(models.Model):
-    name = models.CharField(max_length=32)
-    authors = models.ManyToManyField(to='Author',
-                                    through='Book2Author',
-                                    through_fields=('book','author'))
+# class Book(models.Model):
+#     name = models.CharField(max_length=32)
+#     authors = models.ManyToManyField(to='Author',
+#                                     through='Book2Author',
+#                                     through_fields=('book','author'))
 
-class Author(models.Model):
-    name = models.CharField(max_length=32)
+# class Author(models.Model):
+#     name = models.CharField(max_length=32)
     # books = models.ManyToManyField(to='Book',
     #                                 through='Book2Author',
     #                                 through_fields=('author', 'book'))
@@ -48,6 +48,6 @@ through_fields字段先后顺序
     简单理解
         当前表是谁 就把对应的关联按字段放前面
 """
-class Book2Author(models.Model):
-    book = models.ForeignKey(to='Book')
-    author = models.ForeignKey(to='Author')
+# class Book2Author(models.Model):
+#     book = models.ForeignKey(to='Book')
+#     author = models.ForeignKey(to='Author')

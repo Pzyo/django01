@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<input type="text" id="d1"> +
+<input type="text" id="d2"> =
+<input type="text" id="d3">
+<p>
+    <button id="btn">点我</button>
+</p>
+
+<script>
+    // 先按钮绑定一个点击事件
+    $('#btn').click(function () {
+        // 朝后端发送ajax请求
+        $.ajax({
+            // 1. 指定朝哪个后端发送ajax请求
+            url:'', // 不写就是朝当前地址提交
+            // 2. 指定请求方式
+            type:'post', //不指定默认就是get, 都是小写
+            // 3. 数据
+            {#data:{'username':'pzyo','password':'123'},#}
+            data:{'i1':$('#d1').val(),'i2':$('#d2').val()},
+            {#dataType:'JSON',  // 自动你帮你反序列化#}
+            // 4. 回调函数(也叫异步回调机制): 当后端给你返回结果的时候自动触发 args接收后端的返回结果
+            success:function (args) {
+                {#alert(args)  // 通过DOM操作动态渲染到d3里#}
+                {#$('#d3').val(args)#}
+                console.log(typeof args)
+            }
+        })
+    })
+</script>
+</body>
+</html>
