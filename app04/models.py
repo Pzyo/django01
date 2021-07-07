@@ -29,6 +29,9 @@ class User(models.Model):
     2. 如果在 如何获取对应的中文信息
     """
 
+class Book(models.Model):
+    title = models.CharField(max_length=32)
+
 # class Book(models.Model):
 #     name = models.CharField(max_length=32)
 #     authors = models.ManyToManyField(to='Author',

@@ -16,4 +16,7 @@ urlpatterns = [
     # 用户展示页
     url(r'^user/list',views.user_list),
     url(r'^delete/user/',views.delete_user),
+
+    # 批量插入数据
+    url(r'^ab_pl/',views.ab_pl),
 ]

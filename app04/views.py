@@ -120,3 +120,24 @@ def delete_user(request):
             # 告诉前端操作结果
             back_dic['msg'] = '数据已删除'
             return JsonResponse(back_dic)
+
+def ab_pl(request):
+    # 先给book插入1000条数据
+    # for i in range(1000):
+    #     models.Book.objects.create(title="第%s本书"%i)
+    # 再将所有的数据查询并展示到前端页面
+    book_queryset = models.Book.objects.all()
+
+    # 批量插入
+    # book_list = []
+    # for i in range(10000):
+    #     book_obj = models.Book(title="第%s本书"%i)
+    #     book_list.append(book_obj)
+    # models.Book.objects.bulk_create(book_list)
+    """
+    当你想要批量插入数据的时候  使用orm给你提供的bulk_create能够大大的减少操作时间
+    :param request:
+    :return:
+    """
+
+    return render(request,'app04/ab_pl.html',locals())
