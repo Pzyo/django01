@@ -22,6 +22,9 @@ if __name__ == "__main__":
     # 只要是choices参数的字段 如果你想要获取对应信息, 固定写法 get_字段名_display()
     # print(user_obj.get_gender_display()) # 男
 
-    user_obj = models.User.objects.filter(pk=4).first()
+    # user_obj = models.User.objects.filter(pk=4).first()
     # 如果没有对应关系 那么字段是什么还是展示什么
-    print(user_obj.get_gender_display())  # 4
+    # print(user_obj.get_gender_display())  # 4
+
+    # 清除book表部分数据, 为了演示分页器
+    # models.Book.objects.filter(pk__gt=1000).delete()

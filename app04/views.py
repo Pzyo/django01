@@ -126,7 +126,7 @@ def ab_pl(request):
     # for i in range(1000):
     #     models.Book.objects.create(title="第%s本书"%i)
     # 再将所有的数据查询并展示到前端页面
-    book_queryset = models.Book.objects.all()
+    # book_queryset = models.Book.objects.all()
 
     # 批量插入
     # book_list = []
@@ -140,4 +140,60 @@ def ab_pl(request):
     :return:
     """
 
+    # 分页
+    book_list = models.Book.objects.all()
+
+    # 想访问哪一页
+    current_page = request.GET.get('page', 1)  # 如果获取不到当前页码, 就展示第一页
+    # 数据类型转换
+    try:
+        current_page = int(current_page)
+    except Exception:
+        current_page = 1
+    # 每页展示多少条
+    per_page_num = 10
+    # 起始位置
+    start_page = (current_page - 1) * per_page_num
+    # 终止位置
+    end_page = current_page * per_page_num
+
+    # 计算出到底需要多少页
+    all_count = book_list.count()
+    page_count, more = divmod(all_count, per_page_num)
+    if more:
+        page_count += 1
+
+    page_html = ''
+    xxx = current_page
+    if current_page < 6:
+        current_page = 6
+    for i in range(current_page - 5, current_page + 6):
+        if xxx == i:
+            page_html += '<li class="active"><a href="?page=%s">%s</a></li>'%(i, i)
+        else:
+            page_html += '<li><a href="?page=%s">%s</a></li>' % (i, i)
+
+    book_queryset = book_list[start_page:end_page]
+
     return render(request,'app04/ab_pl.html',locals())
+
+"""
+per_page_num = 10
+
+current_page        start_page          end_page
+    1                   0                   10
+    2                   10                  20
+    3                   20                  30
+    4                   30                  40
+    
+per_page_num = 5
+
+current_page        start_page          end_page
+    1                   0                   5
+    2                   5                   10
+    3                   10                  15
+    4                   15                  20  
+    
+start_page = (current_page - 1) * per_page_num
+end_page = current_page * per_page_num
+"""
