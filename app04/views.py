@@ -121,6 +121,7 @@ def delete_user(request):
             back_dic['msg'] = '数据已删除'
             return JsonResponse(back_dic)
 
+from utils.mypage import Pagination
 def ab_pl(request):
     # 先给book插入1000条数据
     # for i in range(1000):
@@ -141,39 +142,48 @@ def ab_pl(request):
     """
 
     # 分页
-    book_list = models.Book.objects.all()
+    # book_list = models.Book.objects.all()
 
     # 想访问哪一页
-    current_page = request.GET.get('page', 1)  # 如果获取不到当前页码, 就展示第一页
+    # current_page = request.GET.get('page', 1)  # 如果获取不到当前页码, 就展示第一页
     # 数据类型转换
-    try:
-        current_page = int(current_page)
-    except Exception:
-        current_page = 1
+    # try:
+    #     current_page = int(current_page)
+    # except Exception:
+    #     current_page = 1
     # 每页展示多少条
-    per_page_num = 10
+    # per_page_num = 10
     # 起始位置
-    start_page = (current_page - 1) * per_page_num
+    # start_page = (current_page - 1) * per_page_num
     # 终止位置
-    end_page = current_page * per_page_num
+    # end_page = current_page * per_page_num
 
     # 计算出到底需要多少页
-    all_count = book_list.count()
-    page_count, more = divmod(all_count, per_page_num)
-    if more:
-        page_count += 1
+    # all_count = book_list.count()
+    # page_count, more = divmod(all_count, per_page_num)
+    # if more:
+    #     page_count += 1
+    #
+    # page_html = ''
+    # xxx = current_page
+    # if current_page < 6:
+    #     current_page = 6
+    # for i in range(current_page - 5, current_page + 6):
+    #     if xxx == i:
+    #         page_html += '<li class="active"><a href="?page=%s">%s</a></li>'%(i, i)
+    #     else:
+    #         page_html += '<li><a href="?page=%s">%s</a></li>' % (i, i)
+    #
+    # book_queryset = book_list[start_page:end_page]
 
-    page_html = ''
-    xxx = current_page
-    if current_page < 6:
-        current_page = 6
-    for i in range(current_page - 5, current_page + 6):
-        if xxx == i:
-            page_html += '<li class="active"><a href="?page=%s">%s</a></li>'%(i, i)
-        else:
-            page_html += '<li><a href="?page=%s">%s</a></li>' % (i, i)
-
-    book_queryset = book_list[start_page:end_page]
+    book_queryset = models.Book.objects.all()
+    current_page = request.GET.get('page', 1)
+    all_count = book_queryset.count()
+    # 1. 传值生成对象
+    page_obj = Pagination(current_page=current_page,all_count=all_count)
+    # 2. 直接对总数据进行切片操作
+    page_queryset = book_queryset[page_obj.start:page_obj.end]
+    # 3. 将page_queryset传递到页面 替换之前的book_queryset
 
     return render(request,'app04/ab_pl.html',locals())
 
