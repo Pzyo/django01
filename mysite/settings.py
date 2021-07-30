@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'app04',
     'app05',
     'app06',
+    'app07',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 注册自己的中间件(在应用下创建路径有提示, 但是如果是在项目下创建就没有提示, 需要自己比对书写)
+    'app07.mymiddleware.mydd.MyMiddleware1',
+    'app07.mymiddleware.mydd.MyMiddleware2',
 ]
 
 ROOT_URLCONF = 'mysite.urls'

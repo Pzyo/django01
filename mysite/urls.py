@@ -85,6 +85,7 @@ urlpatterns = [
     url(r'^app04/',include('app04.urls')),
     url(r'^app05/',include('app05.urls')),
     url(r'^app06/',include('app06.urls')),
+    url(r'^app07/',include('app07.urls')),
 
 ]
 
