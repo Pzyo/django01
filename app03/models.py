@@ -44,7 +44,7 @@ class Book(models.Model):
     maichu = models.IntegerField(default=1000)
 
     # 一对多
-    publish = models.ForeignKey(to='Publish')
+    publish = models.ForeignKey(to='Publish', on_delete=models.CASCADE)
     # 多对多
     authors = models.ManyToManyField(to='Author')
 
@@ -66,7 +66,7 @@ class Author(models.Model):
     name = models.CharField(max_length=32)
     age =models.IntegerField()
     # 一对一
-    author_detail = models.OneToOneField(to='AuthorDetail')
+    author_detail = models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
 
 class AuthorDetail(models.Model):
     phone = models.BigIntegerField()  # 电话号码用BigIntegerField或者CharField

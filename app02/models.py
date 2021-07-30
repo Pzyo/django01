@@ -11,7 +11,7 @@ class Book(models.Model):
     """
     图书和出版社是一对多 并且书是多的一方 所以外键字段放在书表里面
     """
-    publish = models.ForeignKey(to='Publish')  # 默认就是与出版社表的外键字段做关联 to_field='id'
+    publish = models.ForeignKey(to='Publish', on_delete=models.CASCADE)  # 默认就是与出版社表的外键字段做关联 to_field='id'
     """
     如果字段对应的是ForeignKey 那么orm会在publish字段后面加 _id
     如果你自作聪明加了_id那么orm还是会在后面自动加_id, 变成publish_id_id
@@ -39,7 +39,7 @@ class Author(models.Model):
     """
     作者与作者详情是一对一的关系 外键字段建在任意一方即可 但推荐建在查询频率较高的表
     """
-    author_detail = models.OneToOneField(to='AuthorDetail')
+    author_detail = models.OneToOneField(to='AuthorDetail', on_delete=models.CASCADE)
     """
     OneToOneField也会自动给字段加_id后缀
     所以也不用自己加_id

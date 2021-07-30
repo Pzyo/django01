@@ -30,7 +30,8 @@ def login(request):
                 # 保存用户登录状态
                 obj = redirect('/app06/home/')
             # 让浏览器记录cookie数据
-            obj.set_cookie('username','pzyo666')
+            obj.set_cookie('username','pzyo666',max_age=30,expires=30)
+            # 超时时间3秒到期
             """
             浏览器不单单会帮你存
             而且后面每次访问你的时候还会带着它过来
@@ -55,3 +56,76 @@ def index(request):
 @login_auth
 def func(request):
     return HttpResponse('我是func页面, 只有登录用户才能看到')
+
+@login_auth
+def logout(request):
+    obj = redirect('/app06/login')
+    obj.delete_cookie('username')
+    return obj
+
+def set_session(request):
+    request.session['hobby'] = 'girl'
+    # request.session['hobby1'] = 'girl1'
+    # request.session['hobby2'] = 'girl2'
+    # request.session['hobby3'] = 'girl3'
+    request.session.set_expiry(0)
+    """
+    内部发生了哪些事
+        1. django内部会自动帮你生成一个随机字符串
+        2. django内部自动将随机字符串和对应的数据存储到django_session表中(这一步不是直接操作的)
+            2.1 先在内存中产生操作数据的缓存
+            2.2 在响应结果django中间件的时候才真正的操作数据库
+            ('django.contrib.sessions.middleware.SessionMiddleware')
+        3. 将产生的随机字符串返回给客户端浏览器保存
+    """
+    return HttpResponse('嘿嘿嘿')
+
+def get_session(request):
+    # print(request.session.get('hobby'))
+    if request.session.get('hobby'):
+        print(request.session)
+        print(request.session.get('hobby'))
+        print(request.session.get('hobby1'))
+        print(request.session.get('hobby2'))
+        print(request.session.get('hobby3'))
+        """
+        内部发生了哪些事
+            1. 自动从浏览器请求中获取sessionid对应的随机字符串
+            2. 拿着该随机字符串去django_session表中查找对应的数据
+            3. 
+                如果比对上了, 则将对应的数据取出并以字典的形式封装到request.session中
+                如果比对不上, 则request.session返回的是None
+        """
+        return HttpResponse("哈哈哈")
+    return HttpResponse('大爷, 关门了')
+
+def del_session(request):
+    request.session.delete()
+    return HttpResponse('删喽')
+
+
+from django.views import View
+from django.utils.decorators import method_decorator
+
+"""
+CBV中django不建议你直接给类的方法加装饰器
+无论该装饰器能否正常工作, 都不建议直接加
+"""
+
+# @method_decorator(login_auth, name='get')  # 方式2(可以添加多个, 针对不同的方法加不同的装饰器)
+# @method_decorator(login_auth, name='post')
+class MyLogin(View):
+    @method_decorator(login_auth)  # 方式3  它会直接作用于当前类里所有的方法
+    def dispatch(self, request, *args, **kwargs):
+        """
+        看CBV源码可以得出, CBV里面所有的方法在执行前后需要先经过
+        dispatch方法(该方法可以看成一个分发方法)
+        """
+        super().dispatch(request, *args, **kwargs)
+
+    # @method_decorator(login_auth)  # 方式1
+    def get(self, request):
+        return HttpResponse('get请求')
+
+    def post(self, request):
+        return HttpResponse('post请求')
