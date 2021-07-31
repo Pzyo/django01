@@ -44,13 +44,14 @@ INSTALLED_APPS = [
     'app05',
     'app06',
     'app07',
+    'app08',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -177,3 +178,6 @@ APPEND_SLASH = True
 #         },
 #     }
 # }
+
+# 全局配置: 没有登录跳转到指定的页面
+LOGIN_URL = '/app08/login/'
