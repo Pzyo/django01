@@ -8,10 +8,4 @@
 # # 该方法最小只能到py文件名
 # print(ret)
 
-x = 1
-def func():
-    nonlocal x
-    x = 111
-    print(x)
 
-func()
