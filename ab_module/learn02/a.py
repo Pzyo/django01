@@ -28,3 +28,4 @@ stu1_obj = {
     'tell_stu_info': tell_stu_info,
     'set_stu_info': set_stu_info
 }
+
